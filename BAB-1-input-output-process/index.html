@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bab 1: Java Input & Output</title>
+    <style>
+        :root {
+            --primary-color: #e76f00;
+            --secondary-color: #5382a1;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --sidebar-bg: #2c3e50;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR STYLING --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+        }
+        .sidebar-header {
+            padding: 20px;
+            background-color: #1a252f;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            padding: 15px 0;
+            overflow-y: auto;
+        }
+        .sidebar-menu a {
+            color: #bdc3c7;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-menu a:hover {
+            background-color: #34495e;
+            color: white;
+        }
+        .sidebar-menu a.active {
+            background-color: #34495e;
+            color: white;
+            border-left-color: var(--primary-color);
+        }
+        .sidebar-menu .nav-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            padding: 10px 20px 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- MAIN CONTENT WRAPPER --- */
+        .main-content {
+            flex-grow: 1;
+            margin-left: 260px; /* Lebar sidebar */
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 260px);
+        }
+
+        .mobile-header {
+            display: none;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- STYLING MATERI ASLI --- */
+        header.content-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
+            transition: 0.3s;
+        }
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .quiz-question {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .quiz-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        button.submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button.submit-btn:hover {
+            background-color: #c96000;
+        }
+        #quiz-result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* --- RESPONSIVE MOBILE --- */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .mobile-header {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            ☕ Modul Java
+        </div>
+        <nav class="sidebar-menu">
+            <span class="nav-label">Menu Utama</span>
+            <a href="index.html">🏠 Halaman Depan</a>
+            
+            <span class="nav-label">Daftar Materi</span>
+            <a href="materi1.html" class="active">📖 Bab 1: Input & Output</a>
+            <a href="#">🔒 Bab 2: Variabel & Data</a>
+            <a href="#">🔒 Bab 3: Percabangan</a>
+            <a href="#">🔒 Bab 4: Perulangan</a>
+        </nav>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+        
+        <!-- Header Mobile -->
+        <div class="mobile-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <span style="font-weight: bold;">Bab 1: Input & Output</span>
+        </div>
+
+        <header class="content-header">
+            <h1>Belajar Java: Input & Output</h1>
+            <p>Materi Dasar dan Interaktif</p>
+        </header>
+
+        <div class="container">
+            <!-- Navigation Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="openTab('output')">1. Output</button>
+                <button class="tab-btn" onclick="openTab('input')">2. Input</button>
+                <button class="tab-btn" onclick="openTab('kuis')">3. Kuis Interaktif</button>
+            </div>
+
+            <!-- Tab 1: Output -->
+            <div id="output" class="tab-content active">
+                <h2>Menampilkan Output di Java</h2>
+                <p>Di Java, kita menggunakan object <code>System.out</code> untuk mencetak teks ke console. Berikut adalah penjelasan detail dari tiga metode utama yang sering digunakan:</p>
+
+                <div style="margin-bottom: 30px;">
+                    <h3>1. System.out.print()</h3>
+                    <p>Mencetak teks <strong>tanpa</strong> berpindah baris. Kursor akan tetap berada tepat di sebelah akhir teks yang baru saja dicetak.</p>
+                    <strong>Contoh Kode:</strong>
+<pre><code>System.out.print("Nama: ");
+System.out.print("Ficky");</code></pre>
+                    <strong>Contoh Hasil:</strong>
+<pre><code>Nama: Ficky</code></pre>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3>2. System.out.println()</h3>
+                    <p>Mencetak teks lalu <strong>menambahkan baris baru</strong> (<i>new line</i>) di akhir. Teks yang dicetak setelahnya akan otomatis berada di baris bawah.</p>
+                    <strong>Contoh Kode:</strong>
+<pre><code>System.out.println("Ini baris pertama.");
+System.out.println("Ini baris kedua.");</code></pre>
+                    <strong>Contoh Hasil:</strong>
+<pre><code>Ini baris pertama.
+Ini baris kedua.</code></pre>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3>3. System.out.printf()</h3>
+                    <p>Singkatan dari <i>print format</i>. Metode ini digunakan untuk mencetak teks dengan menyisipkan nilai variabel menggunakan <strong>Argumen Format (Format Specifier)</strong>.</p>
+                    
+                    <h4>Argumen Format Dasar:</h4>
+                    <ul>
+                        <li><code>%s</code> : Untuk String (teks).</li>
+                        <li><code>%d</code> : Untuk bilangan bulat / decimal integer (int, short, long).</li>
+                        <li><code>%f</code> : Untuk bilangan pecahan / floating-point (float, double).</li>
+                        <li><code>%c</code> : Untuk karakter tunggal (char).</li>
+                        <li><code>%n</code> atau <code>\n</code> : Untuk membuat baris baru.</li>
+                    </ul>
+
+                    <h4>Penggunaan Flag:</h4>
+                    <p>Flag disisipkan antara tanda <code>%</code> dan huruf argumen format untuk mengatur tampilan secara spesifik (seperti pembulatan atau spasi). Beberapa contoh flag:</p>
+                    <ul>
+                        <li><strong>Membatasi Desimal (<code>%.2f</code>)</strong>: Menampilkan hanya 2 angka di belakang koma (akan otomatis dibulatkan).</li>
+                        <li><strong>Padding Nol (<code>%03d</code>)</strong>: Menambahkan angka 0 di depan jika digit kurang dari 3. Misal angka <code>5</code> akan dicetak <code>005</code>.</li>
+                        <li><strong>Mengatur Lebar/Spasi (<code>%10s</code>)</strong>: Memberikan ruang sebanyak minimal 10 karakter (rata kanan).</li>
+                    </ul>
+
+                    <strong>Contoh Kode:</strong>
+<pre><code>String nama = "Andi";
+int umur = 21;
+double ipk = 3.8765;
+int antrian = 7;
+
+// Menggunakan %s dan %d
+System.out.printf("Mahasiswa bernama %s berusia %d tahun.%n", nama, umur);
+
+// Menggunakan flag pembatasan desimal (%.2f)
+System.out.printf("IPK saat ini: %.2f%n", ipk);
+
+// Menggunakan flag padding nol (%03d)
+System.out.printf("Nomor antrian Anda: %03d%n", antrian);</code></pre>
+                    <strong>Contoh Hasil:</strong>
+<pre><code>Mahasiswa bernama Andi berusia 21 tahun.
+IPK saat ini: 3.88
+Nomor antrian Anda: 007</code></pre>
+                </div>
+            </div>
+
+            <!-- Tab 2: Input -->
+            <div id="input" class="tab-content">
+                <h2>Mengambil Input dari User</h2>
+                <p>Untuk menerima data dari pengguna melalui console, Java menyediakan beberapa kelas. Dua yang paling populer adalah <code>Scanner</code> dan <code>BufferedReader</code>.</p>
+                
+                <h3>1. Menggunakan Scanner</h3>
+                <p>Scanner adalah cara paling populer dan mudah digunakan karena secara otomatis dapat mem-parsing (menerjemahkan) tipe data primitif langsung dari inputan. Untuk menggunakannya, kita wajib menambahkan <code>import java.util.Scanner;</code> di awal file.</p>
+                
+                <h4>Method yang Sering Digunakan pada Scanner:</h4>
+                <ul>
+                    <li><strong><code>next()</code></strong> : Digunakan untuk membaca <i>String</i> sebanyak <strong>satu kata saja</strong>. Input akan terpotong jika ada spasi.</li>
+                    <li><strong><code>nextLine()</code></strong> : Digunakan untuk membaca <i>String</i> <strong>satu baris penuh</strong>, termasuk spasi di dalamnya, hingga user menekan tombol <i>Enter</i>.</li>
+                    <li><strong><code>nextInt()</code></strong> : Digunakan untuk membaca input berupa angka bulat (tipe data <i>int</i>).</li>
+                    <li><strong><code>nextDouble()</code></strong> : Digunakan untuk membaca input berupa angka desimal/pecahan (tipe data <i>double</i>).</li>
+                    <li><strong><code>nextBoolean()</code></strong> : Digunakan untuk membaca input tipe data <i>boolean</i> (<i>true</i> atau <i>false</i>).</li>
+                </ul>
+
+                <strong>Contoh Kode:</strong>
+<pre><code>import java.util.Scanner;
+
+public class InputScanner {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Masukkan nama depan Anda (1 kata): ");
+        String namaDepan = scanner.next();
+        
+        // Membersihkan karakter "Enter" yang tersisa
+        scanner.nextLine(); 
+        
+        System.out.print("Masukkan hobi Anda (bisa banyak kata): ");
+        String hobi = scanner.nextLine();
+        
+        System.out.print("Masukkan umur Anda: ");
+        int umur = scanner.nextInt();
+        
+        System.out.println("\n--- Hasil ---");
+        System.out.println("Nama Depan : " + namaDepan);
+        System.out.println("Hobi       : " + hobi);
+        System.out.println("Umur       : " + umur + " tahun");
+        
+        scanner.close();
+    }
+}</code></pre>
+                <strong>Contoh Hasil:</strong>
+<pre><code>Masukkan nama depan Anda (1 kata): Budi
+Masukkan hobi Anda (bisa banyak kata): Bermain Sepak Bola
+Masukkan umur Anda: 20
+
+--- Hasil ---
+Nama Depan : Budi
+Hobi       : Bermain Sepak Bola
+Umur       : 20 tahun</code></pre>
+            </div>
+
+            <!-- Tab 3: Quiz -->
+            <div id="kuis" class="tab-content">
+                <h2>Kuis Pemahaman</h2>
+                <p>Uji pemahaman Anda tentang materi Input dan Output di Java.</p>
+                
+                <form id="quiz-form">
+                    <div class="quiz-question">1. Metode apa yang digunakan untuk mencetak teks beserta baris baru di Java?</div>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q1" value="a"> System.out.print()</label>
+                        <label><input type="radio" name="q1" value="b"> System.out.println()</label>
+                        <label><input type="radio" name="q1" value="c"> Console.log()</label>
+                    </div>
+
+                    <div class="quiz-question" style="margin-top:20px;">2. Class apa yang perlu di-import jika ingin menggunakan Scanner?</div>
+                    <div class="quiz-options">
+                        <label><input type="radio" name="q2" value="a"> java.util.Scanner</label>
+                        <label><input type="radio" name="q2" value="b"> java.io.Scanner</label>
+                        <label><input type="radio" name="q2" value="c"> java.util.Input</label>
+                    </div>
+
+                    <button type="button" class="submit-btn" onclick="checkQuiz()">Cek Jawaban</button>
+                </form>
+
+                <div id="quiz-result"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        function openTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            const form = document.forms['quiz-form'];
+            const q1 = form['q1'] ? form['q1'].value : null;
+            const q2 = form['q2'] ? form['q2'].value : null;
+            const resultDiv = document.getElementById('quiz-result');
+
+            if (!q1 || !q2) {
+                resultDiv.style.color = 'red';
+                resultDiv.innerHTML = "Harap jawab semua pertanyaan terlebih dahulu!";
+                return;
+            }
+
+            if (q1 === 'b') score += 50;
+            if (q2 === 'a') score += 50;
+
+            if (score === 100) {
+                resultDiv.style.color = 'green';
+                resultDiv.innerHTML = "Luar biasa! Skor Anda 100. Anda sudah memahami dasar Input/Output Java.";
+            } else if (score === 50) {
+                resultDiv.style.color = '#e76f00';
+                resultDiv.innerHTML = "Skor Anda 50. Coba periksa kembali materinya ya.";
+            } else {
+                resultDiv.style.color = 'red';
+                resultDiv.innerHTML = "Skor Anda 0. Yuk, baca ulang materinya dari awal!";
+            }
+        }
+    </script>
+</body>
+</html>
