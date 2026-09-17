@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Belajar Java</title>
+    <style>
+        :root {
+            --primary: #e76f00; /* Warna khas Java (Orange) */
+            --secondary: #5382a1; /* Biru Java */
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 8px 20px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2c3e50 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 80px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Container & Grid */
+        .container {
+            max-width: 1000px;
+            margin: -40px auto 50px auto; /* Margin negatif agar naik ke atas hero */
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Card Style */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-top: 5px solid transparent;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 1s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+            border-top: 5px solid var(--primary);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .card-desc {
+            color: #666;
+            margin-bottom: 25px;
+            flex-grow: 1; /* Agar tombol selalu di bawah jika teks pendek */
+        }
+
+        /* Button Link */
+        .btn {
+            display: inline-block;
+            text-align: center;
+            background-color: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: #c96000;
+            transform: scale(1.02);
+        }
+
+        .btn.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            margin-top: 40px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bagian Header/Hero -->
+    <header class="hero">
+        <h1>☕ Modul Belajar Java TIF - F</h1>
+        <p>Kumpulan materi interaktif untuk membantu Anda memahami pemrograman Java dari dasar hingga mahir.</p>
+    </header>
+
+    <!-- Bagian Konten / Daftar Bab -->
+    <main class="container">
+        <div class="grid">
+            
+            <!-- Bab 1 -->
+            <article class="card">
+                <div class="card-icon">⌨️</div>
+                <h2 class="card-title">Bab 1: Input & Output</h2>
+                <p class="card-desc">Pelajari cara menampilkan teks ke layar menggunakan <code>print</code>, <code>printf</code>, serta mengambil data dari pengguna menggunakan <code>Scanner</code>.</p>
+                <!-- Pastikan atribut href mengarah ke nama file HTML Anda -->
+                <a href="BAB-1-input-output-process/index.html" class="btn">Mulai Belajar</a>
+            </article>
+
+            <!-- Bab 2 (Contoh Placeholder) -->
+            <article class="card">
+                <div class="card-icon">🔀</div>
+                <h2 class="card-title">Bab 2: Seleksi Kondisi</h2>
+                <p class="card-desc">Memahami konsep penyimpanan data di memori, tipe data primitif, dan konversi tipe data (Casting) di Java.</p>
+                <a href="#" class="btn disabled">Segera Hadir</a>
+            </article>
+
+            <!-- Bab 3 (Contoh Placeholder) -->
+            <article class="card">
+                <div class="card-icon">🔁</div>
+                <h2 class="card-title">Bab 3: Pengulangan (Looping)</h2>
+                <p class="card-desc">Belajar membuat program yang bisa mengambil keputusan menggunakan logika kondisi <code>if-else</code> dan <code>switch-case</code>.</p>
+                <a href="#" class="btn disabled">Segera Hadir</a>
+            </article>
+
+            <!-- Bab 4 (Contoh Placeholder) -->
+            <article class="card">
+                <div class="card-icon">📦</div>
+                <h2 class="card-title">Bab 4: Array</h2>
+                <p class="card-desc">Mempelajari cara mengulang instruksi kode berkali-kali menggunakan <code>for</code>, <code>while</code>, dan <code>do-while</code> secara otomatis.</p>
+                <a href="#" class="btn disabled">Segera Hadir</a>
+            </article>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Modul Pemrograman Java. Dibuat dengan 💻 untuk belajar.</p>
+    </footer>
+
+</body>
+</html>
